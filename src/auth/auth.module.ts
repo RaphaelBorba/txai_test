@@ -13,6 +13,7 @@ import { PrismaService } from 'src/database/prisma.service';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_KEY,
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   providers: [AuthService, UserService, UserRepository, PrismaService],
