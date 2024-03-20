@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -35,8 +36,15 @@ export class ProductController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findById(+id);
+  async findOne(
+    @Param('id') id: string,
+    @Request() req: RequestType & { user: JWT_Request },
+  ) {
+    const product = await this.productService.findById(+id);
+    if (product.user_id !== req.user.user_id) {
+      throw new BadRequestException('Esse produto não lhe pertence!');
+    }
+    return product;
   }
 
   @Patch(':id')

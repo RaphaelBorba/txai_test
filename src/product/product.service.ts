@@ -1,5 +1,5 @@
 import {
-  ConflictException,
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -37,7 +37,7 @@ export class ProductService {
   }
 
   async findById(id: number) {
-    const product = await this.productRepository.findOne(id);
+    const product = await this.productRepository.findById(id);
     if (!product) throw new NotFoundException('Produto não encontrado!');
     return product;
   }
@@ -49,9 +49,9 @@ export class ProductService {
   ) {
     const product = await this.findById(id);
 
-    if (reqUser.role !== 'admin' || product.user_id !== reqUser.user_id) {
-      throw new ConflictException(
-        'Para remover ou atualizar um produto, precisa ser admin ou dono do produto',
+    if (product.user_id !== reqUser.user_id) {
+      throw new BadRequestException(
+        'Para remover ou atualizar um produto, precisa ser dono do produto',
       );
     }
 
@@ -70,11 +70,12 @@ export class ProductService {
   async remove(id: number, reqUser: JWT_Request) {
     const product = await this.findById(id);
 
-    if (reqUser.role !== 'admin' || product.user_id !== reqUser.user_id) {
-      throw new ConflictException(
-        'Para remover ou atualizar um produto, precisa ser admin ou dono do produto',
+    if (product.user_id !== reqUser.user_id) {
+      throw new BadRequestException(
+        'Para remover ou atualizar um produto, precisa ser dono do produto',
       );
     }
+
     try {
       return await this.productRepository.remove(id);
     } catch (error) {

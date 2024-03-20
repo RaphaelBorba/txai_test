@@ -26,7 +26,13 @@ export class ProductRepository {
     return this.productdb.findMany({ where: { user_id: userId } });
   }
 
-  findOne(id: number) {
+  findOne(id: number, userId: number) {
+    return this.productdb.findFirst({
+      where: { id, user_id: userId },
+    });
+  }
+
+  findById(id: number) {
     return this.productdb.findFirst({
       where: { id },
     });
