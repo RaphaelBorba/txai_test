@@ -1,0 +1,24 @@
+service: txai-backend-api
+
+useDotenv: true
+
+plugins:
+ - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+    JWT_KEY: ${env:JWT_KEY}
+
+functions:
+  main:
+    handler: dist/serverless.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
