@@ -82,3 +82,11 @@ $ npm run build
 
 $ sls offline
 ```
+
+## Swagger API
+
+ - Na rota em que estiver rodando a aplicação, coloque /api no final para ver o swagger:
+
+ ```
+ Exemplo: http://localhost:4000/api
+```
