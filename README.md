@@ -53,6 +53,10 @@ $ npm install
 DATABASE_URL = "postgresql://usuario:senha@endereco-do-banco:porta/nome-do-banco"
  ```
 
+ - Depois de tudo, rode o seed para criar um usuário admin:
+ ```
+ npx prisma db seed
+ ```
 
 
 ## Running the app
