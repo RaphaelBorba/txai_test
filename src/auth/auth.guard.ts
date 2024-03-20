@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -7,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { UserService } from 'src/user/user.service';
 
 type JWTPayload = {
   user_id: number;
@@ -17,7 +19,10 @@ type JWTPayload = {
 export const AuthGuard = (routeAdmin?: boolean) => {
   @Injectable()
   class AuthGuardMixin implements CanActivate {
-    constructor(readonly jwtService: JwtService) {}
+    constructor(
+      readonly jwtService: JwtService,
+      readonly userService: UserService,
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
       const request = context.switchToHttp().getRequest();
@@ -34,6 +39,12 @@ export const AuthGuard = (routeAdmin?: boolean) => {
         console.log(error);
         throw new UnauthorizedException();
       }
+      try {
+        await this.userService.findById(payload.user_id);
+      } catch (error) {
+        throw new BadRequestException('Usuário não cadastrado!');
+      }
+
       if (routeAdmin) {
         if (payload.role !== 'admin') {
           throw new UnauthorizedException('Rota de Admin!');

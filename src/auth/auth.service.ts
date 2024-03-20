@@ -16,7 +16,7 @@ export class AuthService {
   ): Promise<{ access_token: string }> {
     const user = await this.userService.findByName(username);
     if (user?.password !== pass) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Nome e/ou senha errado!');
     }
     const payload = { user_id: user.id, username: user.name, role: user.role };
     return {
