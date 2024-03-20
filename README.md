@@ -24,13 +24,39 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Txai teste técnico.
 
 ## Installation
 
 ```bash
 $ npm install
 ```
+
+ - Configure o arquivo .env de acordo com o .env.example
+ ```bash
+  DATABASE_URL=
+  JWT_KEY=
+```
+
+### Database Config:
+
+ - Primeiro crie um banco de dados na maquina para sincronizar com a aplicação:
+
+ ```
+ npx prisma init
+ ```
+
+  - Lembre de configurar o .env:
+ ```
+DATABASE_URL = "postgresql://usuario:senha@endereco-do-banco:porta/nome-do-banco"
+ ```
+
+ - Rode o comando para criar a estrutura do banco no seu banco de dados: 
+ ```
+ npx prisma migrate dev
+ ```
+
+
 
 ## Running the app
 
@@ -45,29 +71,13 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Serverless Local
 
-```bash
-# unit tests
-$ npm run test
+ - Após configurar o arquivo .env e gerar o build, use o <a href="https://www.serverless.com/framework/docs/getting-started" target="_blank"> Serverless CLI</a> para rodar uma lambda local:
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
+ ```bash
+$ npm run build
+
+$ sls offline
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
