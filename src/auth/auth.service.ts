@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { RegisterDto } from './dto/register.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -9,13 +10,14 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+  private SALT = 10;
 
   async signIn(
     username: string,
-    pass: string,
+    password: string,
   ): Promise<{ access_token: string }> {
     const user = await this.userService.findByName(username);
-    if (user?.password !== pass) {
+    if (!(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Nome e/ou senha errado!');
     }
     const payload = { user_id: user.id, username: user.name, role: user.role };
@@ -26,7 +28,8 @@ export class AuthService {
 
   async register(signUpDTO: RegisterDto) {
     try {
-      return await this.userService.create(signUpDTO);
+      const hash = await bcrypt.hash(signUpDTO.password, this.SALT);
+      return await this.userService.create({ ...signUpDTO, password: hash });
     } catch (error) {
       throw error;
     }
