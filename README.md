@@ -43,17 +43,14 @@ $ npm install
  - Primeiro crie um banco de dados na maquina para sincronizar com a aplicação:
 
  ```
- npx prisma init
+ npx prisma migrate dev
+
+ npx prisma generate
  ```
 
   - Lembre de configurar o .env:
  ```
 DATABASE_URL = "postgresql://usuario:senha@endereco-do-banco:porta/nome-do-banco"
- ```
-
- - Rode o comando para criar a estrutura do banco no seu banco de dados: 
- ```
- npx prisma migrate dev
  ```
 
 
