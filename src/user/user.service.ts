@@ -7,17 +7,24 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  private SALT = 10;
+
   async create(createUserDto: CreateUserDto) {
     const existName = await this.findByName(createUserDto.name);
     if (existName) throw new ConflictException('Nome já cadastrado!');
+    const hash = await bcrypt.hash(createUserDto.password, this.SALT);
 
     try {
-      const newUser = await this.userRepository.create(createUserDto);
+      const newUser = await this.userRepository.create({
+        ...createUserDto,
+        password: hash,
+      });
       return newUser;
     } catch (error) {
       console.log(error);

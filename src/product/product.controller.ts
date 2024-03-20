@@ -16,7 +16,10 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request as RequestType } from 'express';
 import { JWT_Request } from 'src/types/jwtRequest';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Produto')
+@ApiBearerAuth()
 @UseGuards(AuthGuard(false))
 @Controller('product')
 export class ProductController {

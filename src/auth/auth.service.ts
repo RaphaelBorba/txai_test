@@ -28,8 +28,7 @@ export class AuthService {
 
   async register(signUpDTO: RegisterDto) {
     try {
-      const hash = await bcrypt.hash(signUpDTO.password, this.SALT);
-      return await this.userService.create({ ...signUpDTO, password: hash });
+      return await this.userService.create(signUpDTO);
     } catch (error) {
       throw error;
     }
